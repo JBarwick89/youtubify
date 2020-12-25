@@ -4,124 +4,80 @@
       name="searchBar" 
       id="searchBar" 
       v-model="channelsSearchQuery"
+      @keyup.enter="searchChannels"
     >
 
-    <button 
+    <v-btn
       type="button" 
       @click="searchChannels"
       :loading="loading"
-    >Search</button>
+    >Search</v-btn>
 
     <div id="resultsArea">
       <div class="loading" v-if="loading">
         Searching...
       </div>
-      <div class="loading" v-else-if="channelResults.length">
-        Results! {{ channelResults.data.items }}
+
+      <div v-else-if="channelResults.length">
+          <v-container class="grey lighten-5">
+
+            <v-row v-for="channel in channelResults" :key="channel.id.channelId">
+              <ChannelResult :channel="channel" :accessToken="accessToken"/>
+            </v-row>        
+          </v-container>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+  import axios from 'axios';
+  import ChannelResult from './ChannelResult';
 
-export default {
-  name: 'ChannelSearch',
-  props: {
-    msg: String
-  },
+  export default {
+    name: 'ChannelSearch',
+    
+    components: {
+      ChannelResult,
+    },
 
-  data() {
-    return {
+    props: {
+      msg: String
+    },
+
+    data: () => ({
       apiKey: 'AIzaSyDqNu_Q-Tcy7qrxxGVyp5ofO-HJpfwmx_s',
       channelResults: [],
       channelsSearchQuery: '',
       loading: false,
+      playlistSelected: false,
+      accessToken: '',
+    }),
 
-    };
-  },
-
-  created() {
-    // this.initGoogleAPI();
-  },
-
-  mounted() {
-    // this.importExternalScripts();
-  },
-  
-  // watch: {
-  //   addressSearch: _.debounce(function(addr) { this.getAddresses(addr) }, 500)
-  // },
-
-  methods: {
-    async searchChannels() {
-      this.loading = true;
-
-      const channelsSearchUrl = `https://cors-anywhere.herokuapp.com/https://youtube.googleapis.com/youtube/v3/search?
-        part=snippet%2CcontentDetails
-        &q=${this.channelsSearchQuery}
-        &type=channel
-        &key=${this.apiKey}
-        &maxResults=10`;
-
-      axios
-        .get(channelsSearchUrl)
-        .then(channelsSearchResults => {
-          this.channelResults = channelsSearchResults;
-          console.log(this.channelResults);
-          this.loading = false;
-        }).catch(error => {
-          console.log(error)
-        });
+    created() {
+      // this is hacky. clean the url params somehow
+      this.accessToken = this.$route.fullPath.substring(this.$route.fullPath.indexOf('access_token')+13, this.$route.fullPath.indexOf('&'));
     },
 
-    initGoogleAPI() {
-      // const apiUrl = `${baseUrl}part=${part}&type=${type}&order=${order}&q=${q}&maxResults=${maxResults}&key=${key}&pageToken=${nextPageToken}`;
-      // const googleChannelVideos = `https://www.googleapis.com/youtube/v3/channels?id=UC_x5XG1OV2P6uZZ5FSM9Ttw&key=${this.apiKey}`
+    methods: {
+      async searchChannels() {
+        this.loading = true;
+        const channelsSearchUrl = `https://cors-anywhere.herokuapp.com/https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${this.channelsSearchQuery}&key=${this.apiKey}&type=channel&maxResults=10`;
 
-      // axios.get(
-      //       `https://www.googleapis.com/youtube/v3/channels?id=${channelsSearchResults.data.items[0].id.channelId}
-      //       &part=contentDetails
-      //       &key=${this.apiKey}`
-      //     )
-      //   .then(channelsResult => {
-      //     const channelUploadedVideosPlaylistId = channelsResult.data.items[0].contentDetails.relatedPlaylists.uploads;
-      //     return axios.get(
-      //       `https://youtube.googleapis.com/youtube/v3/playlistItems?
-      //       part=snippet%2CcontentDetails%2Cstatus
-      //       &playlistId=${channelUploadedVideosPlaylistId}
-      //       &key=${this.apiKey}
-      //       &maxResults=50`
-      //     );
-      //   }).then(uploadedVideosList => {
-      //     console.log(uploadedVideosList);
-      //   })
-      //   .catch(error => console.log(error));
-    },
+        axios.get(channelsSearchUrl)
+          .then(channelsSearchResults => {  
+            this.channelResults = channelsSearchResults.data.items;
+            this.loading = false;
+          }).catch(error => {
+            console.log(error)
+          });
+      },
+    }
   }
-
-}
-
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
 input {
   width: 50%;
   position: relative;
@@ -134,8 +90,9 @@ input {
   padding-top: 10px;
   cursor: text;  
 }
+
 button {
-  height: 55px;
+  height: 50px;
   border-radius: 3px;
   border: 2px solid lightgray;
   box-shadow: 0 0 10px #eceaea;

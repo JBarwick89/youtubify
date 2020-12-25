@@ -1,29 +1,40 @@
 <template>
-  <div id="app">
-    <p>Welcome to Youtubify</p>
-    <ChannelSearch msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="red"
+      dark
+    >
+      Youtubify
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          lazy-src="src/assets/logo.png"
+          transition="scale-transition"
+          width="40"
+        />
+
+        <v-img
+          alt="Vuetify Name"
+          class="shrink mt-1 hidden-sm-and-down"
+          contain
+          min-width="100"
+          value="Youtubify"
+          width="100" 
+        />
+      </div>
+    </v-app-bar>
+
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import ChannelSearch from './components/ChannelSearch.vue'
-
 export default {
   name: 'App',
-
-  components: {
-    ChannelSearch
-  },
-}
+};
 </script>
-
-<style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
-</style>
