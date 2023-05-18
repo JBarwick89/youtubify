@@ -1,24 +1,5 @@
 # youtubify-v2
 
-## Project setup
-```
-npm install
-```
+Client-side web app to allow user to add videos from a Youtube channel to one of their Youtube playlists.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Useful when you first discover a channel and would like to check out all of its content.
