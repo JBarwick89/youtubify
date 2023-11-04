@@ -1,9 +1,10 @@
 const express = require('express');
 const app = express();
-const path = require('path');
+var cors = require('cors');
 const port = 8000;
 require('dotenv').config();
- 
+app.use(cors())
+
 app.get('/apikey', (req, res) => {
   res.send(process.env.YOUTUBE_API_KEY);
 });

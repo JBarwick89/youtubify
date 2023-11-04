@@ -46,7 +46,6 @@
     },
 
     data: () => ({
- // TODO: replace
       channelResults: [],
       channelsSearchQuery: '',
       loading: false,
@@ -54,16 +53,27 @@
       accessToken: '',
     }),
 
-    created() {
+    async created() {
+      await this.getApiKey();
+
       // this is hacky. clean the url params somehow
       this.accessToken = this.$route.fullPath.substring(this.$route.fullPath.indexOf('access_token')+13, this.$route.fullPath.indexOf('&'));
     },
 
     methods: {
+      async getApiKey() {
+        this.apiKey = await axios.get(`${process.env.VUE_APP_BACKEND_ENDPOINT}/apikey`)
+        .then(res => {
+          return res.data;
+        }).catch(error => {
+          console.error(error)
+        });
+      },
+
       async searchChannels() {
         this.loading = true;
-        const channelsSearchUrl = `http://localhost:3000?q=${this.channelsSearchQuery}`;
-        // const channelsSearchUrl = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=&key=${this.apiKey}&type=channel&maxResults=10`;        
+        const channelsSearchUrl = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${this.channelsSearchQuery}&key=${this.apiKey}&type=channel&maxResults=10`;   
+     
         axios.get(channelsSearchUrl)
           .then(channelsSearchResults => {  
             this.channelResults = channelsSearchResults.data.items;

@@ -41,12 +41,10 @@ export default {
   },
 
   methods: {
-    async getAPiKey() {
-      console.log(process.env.VUE_APP_BACKEND_ENDPOINT);
+    async getApiKey() {
       this.apiKey = await axios.get(`${process.env.VUE_APP_BACKEND_ENDPOINT}/apikey`)
       .then(res => {
-        console.log(res);
-        return res.data.items[0].contentDetails.relatedPlaylists.uploads;
+        return res.data;
       }).catch(error => {
         console.error(error)
       });
