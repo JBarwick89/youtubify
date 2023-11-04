@@ -46,7 +46,7 @@
     },
 
     data: () => ({
-      apiKey: 'AIzaSyDqNu_Q-Tcy7qrxxGVyp5ofO-HJpfwmx_s',
+ // TODO: replace
       channelResults: [],
       channelsSearchQuery: '',
       loading: false,
@@ -62,14 +62,14 @@
     methods: {
       async searchChannels() {
         this.loading = true;
-        const channelsSearchUrl = `https://cors-anywhere.herokuapp.com/https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${this.channelsSearchQuery}&key=${this.apiKey}&type=channel&maxResults=10`;
-
+        const channelsSearchUrl = `http://localhost:3000?q=${this.channelsSearchQuery}`;
+        // const channelsSearchUrl = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=&key=${this.apiKey}&type=channel&maxResults=10`;        
         axios.get(channelsSearchUrl)
           .then(channelsSearchResults => {  
             this.channelResults = channelsSearchResults.data.items;
             this.loading = false;
           }).catch(error => {
-            console.log(error)
+            console.log(error);
           });
       },
     }

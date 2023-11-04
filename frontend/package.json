@@ -2,14 +2,18 @@
   "name": "youtubify-v2",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
+  "homepage": ".",
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^1.5.1",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
+    "vue-axios": "^3.5.2",
     "vue-router": "^3.4.9",
     "vuetify": "^2.2.11"
   },
